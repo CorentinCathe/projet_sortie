@@ -26,9 +26,18 @@
     {% if app.user %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
+            <a class="navbar-brand" href="{{path('main')}}">Sortie</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="d-flex collapse" id="navbarNav">
                 <div class="navbar-nav">
-                    <a class="nav-link {{ app.request.get('_route') == 'wish-list' ? 'active' }}"
+                    <a class="nav-link {{ app.request.get('_route') == 'main' ? 'active' }}" aria-current="page"
+                        href="{{path('main')}}">Accueil</a>
+                    <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
+                        href="{{path('profil',{id:app.user.id})}}">Mon Profil</a>
+                    <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
                         href="{{path('app_logout')}}">log out</a>
                     <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
                        href="{{path('sortieAdd', {id:app.user.id})}}">Créer Sortie</a>

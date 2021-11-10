@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfilController!{% endblock %}
+
+{% block profilStyle %}
+<link rel="stylesheet" href="{{asset('styles/profil.css')}}">{% endblock %}
+
+{% block body %}
+
+<div class="card"></div>
+{% if app.user.pseudo %}
+<h1>{{user.pseudo}}</h1>
+{% else %}
+<h1>Mon Profile</h1>
+{% endif %}
+<label for="first-name">Prénom:</label>
+<p id="first-name">{{user.firstName}}</p>
+<label for="name">Nom:</label>
+<p id="name">{{user.name}}</p>
+<label for="phone-number">Téléphone:</label>
+<p id="phone-number">{{user.phoneNumber}}</p>
+<label for="mail">Email:</label>
+<p id="mail">{{user.email}}</p>
+<label for="site">Site:</label>
+<p id="site">{{user.site.name}}</p>
+
+<a class="btn btn-primary" href="{{path('modify',{id:user.id})}}">Modifier</a>
+
+
+{% endblock %}
