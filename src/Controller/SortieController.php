@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\City;
+use App\Entity\Place;
 use App\Entity\Sortie;
+use App\Form\PlaceType;
 use App\Form\SortieType;
+use App\Repository\CityRepository;
+use App\Repository\PlaceRepository;
 use App\Repository\SortieRepository;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
@@ -31,10 +36,22 @@ class SortieController extends AbstractController
      /**
      * @Route("/sortieAdd/{id}", name="sortieAdd")
      */
-  public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user): Response {
+  public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user, PlaceRepository $placeRepo, CityRepository $cityRepo): Response {
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $place = new Place();
+        $placeForm = $this->createForm(PlaceType::class, $place);
+        $placeForm->handleRequest($request);
+        /*$city = new City();
+        $cityForm = $this->createForm(City::class, $city);
+        $cityForm->handleRequest($request);*/
         $sortieForm->handleRequest($request);
+        if($placeForm->isSubmitted()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($place);
+            $em->flush();
+        }
+
         if($sortieForm-> isSubmitted()){
             $em = $this->getDoctrine()->getManager();
             $sortie->setOrganisator($user);
@@ -43,7 +60,8 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('main');
         }
         return $this->render('sortie/addSortie.html.twig', [
-            'sortieForm' => $sortieForm->createView()
+            'sortieForm' => $sortieForm->createView(),
+            'placeForm' => $placeForm->createView(),
         ]);
     }
 
