@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Modifier Profil</h1>
+{{form_start(formProfil)}}
+{{form_widget(formProfil)}}
+<button type="submit" class="btn btn-success"><i class="fa fa-edit"></i></button>
+{{form_end(formProfil)}}
+{% endblock body %}
