@@ -2,21 +2,6 @@
 
 {% block title %}Hello MainController!{% endblock %}
 
-{% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <div class="d-flex collapse" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-                       href="{{path('app_login')}}">Log in</a>
-                    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-                       href="{{path('sortieAdd', {id:app.user.id})}}">Créer Sortie</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
