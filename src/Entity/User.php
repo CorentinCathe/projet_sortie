@@ -27,9 +27,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
