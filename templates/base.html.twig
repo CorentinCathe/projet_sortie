@@ -30,6 +30,8 @@
                 <div class="navbar-nav">
                     <a class="nav-link {{ app.request.get('_route') == 'wish-list' ? 'active' }}"
                         href="{{path('app_logout')}}">log out</a>
+                    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
+                       href="{{path('sortieAdd', {id:app.user.id})}}">Créer Sortie</a>
                 </div>
             </div>
         </div>
