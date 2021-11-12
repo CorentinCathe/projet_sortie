@@ -3,47 +3,45 @@
 {% block title %}Sortie index{% endblock %}
 
 {% block body %}
-    <h1>Sortie index</h1>
+<h1>Sortie index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>DateHourStart</th>
-                <th>DateLimitSubscritption</th>
-                <th>NbSubMax</th>
-                <th>Status</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>DateHourStart</th>
+            <th>DateLimitSubscritption</th>
+            <th>NbSubMax</th>
+            <th>Status</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for sortie in sorties %}
-            {% if (sortie.status.type != 'Annulée' and sortie.status.type != 'Passée') or (sortie.status.type == 'Annulée' and user == sortie.organisator)%}
-            <tr>
-                <td>{{ sortie.id }}</td>
-                <td>{{ sortie.name }}</td>
-                <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ sortie.nbSubMax }}</td>
-                <td>{{ sortie.status.type }}</td>
-                <td>
-                    {#,{'sortieId': sortie.id}#}
-                    <a href="{{ path('sortie_show', {'id': sortie.id}) }}">show</a>
-                    {% if user == sortie.organisator and sortie.status.type == 'Créée' %}
-                        <a href="{{ path('sortie_edit', {'id': sortie.id}) }}">edit</a>
-                    {% endif %}
-                    {% if user == sortie.organisator and sortie.status.type == 'Ouverte' %}
-                        <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}">Cancel</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endif %}
+        <tr>
+            <td>{{ sortie.id }}</td>
+            <td>{{ sortie.name }}</td>
+            <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ sortie.nbSubMax }}</td>
+            <td>{{ sortie.status.type }}</td>
+            <td>
+                {#,{'sortieId': sortie.id}#}
+                <a href="{{ path('sortie_show', {'id': sortie.id}) }}">show</a>
+                {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
+                <a href="{{ path('sortie_edit', {'id': sortie.id}) }}">edit</a>
+                {% endif %}
+                {% if app.user == sortie.organisator and sortie.status.type == 'Ouverte' %}
+                <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}">Cancel</a>
+                {% endif %}
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 {% endblock %}
