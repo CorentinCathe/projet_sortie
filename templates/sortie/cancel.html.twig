@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sortie{% endblock %}
+
+{% block body %}
+    <h1>Cancel Sortie</h1>
+
+    {{ form_start(sortieForm) }}
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom :</th>
+            <td>{{ sortie.name }}</td>
+        </tr>
+        <tr>
+            <th>Date de la sortie :</th>
+            <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Ville organisatrice :</th>
+            <td>{{ sortie.organisator.site.name }}</td>
+        </tr>
+        <tr>
+            <th>Lieu :</th>
+            <td>{{ sortie.place.name }}</td>
+        </tr>
+        <tr>
+            <th>Reason :</th>
+            <td>{{ form_widget(sortieForm.information) }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-successe"> Enregistrer {#<i class="fa fa-plus">#}</i></button>
+    <button class="btn btn-successe"><a href="{{ path('sortie_index') }}">Annuler</a></button>
+    {{form_end(sortieForm, {'render_rest': false}) }}
+{% endblock %}

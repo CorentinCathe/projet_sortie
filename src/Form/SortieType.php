@@ -43,6 +43,13 @@ class SortieType extends AbstractType
         ;
     }
 
+    public function buildCancelForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('information')
+        ;
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
