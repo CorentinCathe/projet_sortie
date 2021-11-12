@@ -36,11 +36,12 @@ class SortieController extends AbstractController
             'user' => $user,
         ]);
     }
-  
-     /**
+
+    /**
      * @Route("/sortieAdd/{id}", name="sortieAdd")
      */
-  public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user, PlaceRepository $placeRepo): Response {
+    public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user, PlaceRepository $placeRepo, CityRepository $cityRepo): Response
+    {
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $place = new Place();
@@ -50,13 +51,13 @@ class SortieController extends AbstractController
         $cityForm = $this->createForm(City::class, $city);
         $cityForm->handleRequest($request);*/
         $sortieForm->handleRequest($request);
-        if($placeForm->isSubmitted()){
+        if ($placeForm->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($place);
             $em->flush();
         }
 
-        if($sortieForm-> isSubmitted()){
+        if ($sortieForm->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
             $sortie->setOrganisator($user);
             $em->persist($sortie);
@@ -78,6 +79,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
             'user' => $user,
+            'users' => $sortie->getUser()
         ]);
     }
 
@@ -106,7 +108,7 @@ class SortieController extends AbstractController
      */
     public function delete(Request $request, Sortie $sortie): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sortie);
             $entityManager->flush();
@@ -134,5 +136,17 @@ class SortieController extends AbstractController
             'sortieForm' => $sortieForm,
         ]);
 
+    }
+
+
+    /**
+     * @Route("/sign-in/{id}", name="sign_in")
+     */
+    public function signIn(Sortie $sortie): Response
+    {
+        $user = $this->getUser();
+        $sortie->addUser($user);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->redirectToRoute('main');
     }
 }

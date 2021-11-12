@@ -2,21 +2,6 @@
 
 {% block title %}Home{% endblock %}
 
-{% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <div class="d-flex collapse" id="navbarNav">
-                <div class="navbar-nav">
-                    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-                       href="{{path('app_login')}}">Log in</a>
-                    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-                       href="{{path('main')}}">Retour</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
-
 {% block body %}
     <h1>Créer une sortie !</h1>
     <div name="sortie-form">
@@ -35,6 +20,11 @@
         <button type="submit" class="btn btn-successe" onclick="unhideButton() ; hidePlaceForm()"> Ajouter Lieu {#<i class="fa fa-plus">#}</i></button>
         {{ form_end(placeForm) }}
     </div>
+    <div>
+        <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
+           href="{{path('sortie_index')}}">Annuler</a>
+    </div>
+
 
     <script>
         function unhidePlaceForm(){
