@@ -26,19 +26,23 @@ class ProfilController extends AbstractController
      */
     public function modify(User $user, Request $req): Response
     {
-        $formProfil = $this->createForm(ProfilType::class, $user);
+        if ($this->getUser()->getId()  == $user->getId()) {
+            $formProfil = $this->createForm(ProfilType::class, $user);
 
-        $formProfil->handleRequest($req);
-        if ($formProfil->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-            // $user->upgradePassword();
-            $em->flush();
+            $formProfil->handleRequest($req);
+            if ($formProfil->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                // $user->upgradePassword();
+                $em->flush();
 
-            return $this->redirectToRoute('profil');
+                return $this->redirectToRoute('profil');
+            }
+
+            return $this->render('profil/modifyProfil.html.twig', [
+                'formProfil' => $formProfil->createView()
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
         }
-
-        return $this->render('profil/modifyProfil.html.twig', [
-            'formProfil' => $formProfil->createView()
-        ]);
     }
 }

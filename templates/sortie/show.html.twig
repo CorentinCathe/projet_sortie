@@ -66,8 +66,11 @@
 </table>
 
 <a href="{{ path('sortie_index') }}">back to list</a>
+{% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
 <a href="{{ path('sortie_edit', {'id': sortie.id}) }}">edit</a>
-{% if app.user not in users or users|length < sortie.nbSubMax %} <a href="{{ path('sign_in', {'id': sortie.id}) }}">Sign
+{% endif %}
+{% if app.user not in users and users|length < sortie.nbSubMax and app.user %} <a
+    href="{{ path('sign_in', {'id': sortie.id}) }}">Sign
     In</a>
     {% endif %}
     {{ include('sortie/_delete_form.html.twig') }}

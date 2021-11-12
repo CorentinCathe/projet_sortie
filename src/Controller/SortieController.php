@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Sortie;
@@ -13,9 +14,6 @@ use App\Repository\SortieRepository;
 use App\Repository\StatusRepository;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
-use phpDocumentor\Reflection\Types\This;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,9 +26,9 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="sortie_index", methods={"GET"})
      */
-    public function index( SortieRepository $sortieRepository): Response
+    public function index(SortieRepository $sortieRepository): Response
     {
-        $user =$this->getUser();
+        $user = $this->getUser();
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sortieRepository->findAll(),
             'user' => $user,
@@ -40,34 +38,38 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortieAdd/{id}", name="sortieAdd")
      */
-    public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user, PlaceRepository $placeRepo, CityRepository $cityRepo): Response
+    public function sortieAdd(Request $request, User $user): Response
     {
-        $sortie = new Sortie();
-        $sortieForm = $this->createForm(SortieType::class, $sortie);
-        $place = new Place();
-        $placeForm = $this->createForm(PlaceType::class, $place);
-        $placeForm->handleRequest($request);
-        /*$city = new City();
+        if ($this->getUser()) {
+            $sortie = new Sortie();
+            $sortieForm = $this->createForm(SortieType::class, $sortie);
+            $place = new Place();
+            $placeForm = $this->createForm(PlaceType::class, $place);
+            $placeForm->handleRequest($request);
+            /*$city = new City();
         $cityForm = $this->createForm(City::class, $city);
         $cityForm->handleRequest($request);*/
-        $sortieForm->handleRequest($request);
-        if ($placeForm->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($place);
-            $em->flush();
-        }
+            $sortieForm->handleRequest($request);
+            if ($placeForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($place);
+                $em->flush();
+            }
 
-        if ($sortieForm->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-            $sortie->setOrganisator($user);
-            $em->persist($sortie);
-            $em->flush();
-            return $this->redirectToRoute('sortie_index');
+            if ($sortieForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $sortie->setOrganisator($user);
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_index');
+            }
+            return $this->render('sortie/addSortie.html.twig', [
+                'sortieForm' => $sortieForm->createView(),
+                'placeForm' => $placeForm->createView(),
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
         }
-        return $this->render('sortie/addSortie.html.twig', [
-            'sortieForm' => $sortieForm->createView(),
-            'placeForm' => $placeForm->createView(),
-        ]);
     }
 
     /**
@@ -88,19 +90,23 @@ class SortieController extends AbstractController
      */
     public function edit(Sortie $sortie, Request $request): Response
     {
-        $form = $this->createForm(SortieType::class, $sortie);
-        $form->handleRequest($request);
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            $form = $this->createForm(SortieType::class, $sortie);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('sortie/edit.html.twig', [
+                'sortie' => $sortie,
+                'form' => $form,
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
         }
-
-        return $this->renderForm('sortie/edit.html.twig', [
-            'sortie' => $sortie,
-            'form' => $form,
-        ]);
     }
 
     /**
@@ -108,13 +114,17 @@ class SortieController extends AbstractController
      */
     public function delete(Request $request, Sortie $sortie): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($sortie);
-            $entityManager->flush();
-        }
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($sortie);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+        } else {
+            throw $this->createAccessDeniedException();
+        }
     }
 
     /**
@@ -122,20 +132,23 @@ class SortieController extends AbstractController
      */
     public function cancel(Sortie $sortie, Request $request, StatusRepository $statusRepo): Response
     {
-        $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
-        $sortieForm->handleRequest($request);
-        if($sortieForm->isSubmitted()){
-            $em = $this->getDoctrine()->getManager();
-            $sortie->setStatus($statusRepo->find(6));
-            $em->persist($sortie);
-            $em->flush();
-            return $this->redirectToRoute('sortie_index');
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
+            $sortieForm->handleRequest($request);
+            if ($sortieForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $sortie->setStatus($statusRepo->find(6));
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_index');
+            }
+            return $this->renderForm('sortie/cancel.html.twig', [
+                'sortie' => $sortie,
+                'sortieForm' => $sortieForm,
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
         }
-        return $this->renderForm('sortie/cancel.html.twig', [
-            'sortie' => $sortie,
-            'sortieForm' => $sortieForm,
-        ]);
-
     }
 
 
@@ -144,9 +157,13 @@ class SortieController extends AbstractController
      */
     public function signIn(Sortie $sortie): Response
     {
-        $user = $this->getUser();
-        $sortie->addUser($user);
-        $this->getDoctrine()->getManager()->flush();
-        return $this->redirectToRoute('main');
+        if ($this->getUser() != $sortie->getOrganisator()) {
+            $user = $this->getUser();
+            $sortie->addUser($user);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('main');
+        } else {
+            throw $this->createAccessDeniedException();
+        }
     }
 }
