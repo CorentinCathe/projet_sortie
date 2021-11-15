@@ -7,10 +7,12 @@ use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Sortie;
 use App\Form\PlaceType;
+use App\Form\SortieInfoType;
 use App\Form\SortieType;
 use App\Repository\CityRepository;
 use App\Repository\PlaceRepository;
 use App\Repository\SortieRepository;
+use App\Repository\StatusRepository;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\SearchSortieForm;
@@ -34,85 +36,143 @@ class SortieController extends AbstractController
         $data = new SearchData();
         $form = $this->createForm(SearchSortieForm::class,$data);
         $form->handleRequest($request);
+        $user = $this->getUser();
         return $this->render('sortie/index.html.twig', [
-            'sorties' => $sortieRepository->findSearch($data, $this->getUser()),
+            'sorties' => $sortieRepository->findSearch($data, $user),
+            'user' => $user,
             'form' => $form->createView()
-        ]);
-    }
-  
-     /**
-     * @Route("/sortieAdd/{id}", name="sortieAdd")
-     */
-  public function sortieAdd(Request $request, SortieRepository $sortieRepo, User $user, PlaceRepository $placeRepo, CityRepository $cityRepo): Response {
-        $sortie = new Sortie();
-        $sortieForm = $this->createForm(SortieType::class, $sortie);
-        $place = new Place();
-        $placeForm = $this->createForm(PlaceType::class, $place);
-        $placeForm->handleRequest($request);
-        /*$city = new City();
-        $cityForm = $this->createForm(City::class, $city);
-        $cityForm->handleRequest($request);*/
-        $sortieForm->handleRequest($request);
-        if($placeForm->isSubmitted()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($place);
-            $em->flush();
-        }
-
-        if($sortieForm-> isSubmitted()){
-            $em = $this->getDoctrine()->getManager();
-            $sortie->setOrganisator($user);
-            $em->persist($sortie);
-            $em->flush();
-            return $this->redirectToRoute('main');
-        }
-        return $this->render('sortie/addSortie.html.twig', [
-            'sortieForm' => $sortieForm->createView(),
-            'placeForm' => $placeForm->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="sortie_show", methods={"GET"})
+     * @Route("/sortieAdd/{id}", name="sortieAdd")
+     */
+    public function sortieAdd(Request $request, User $user): Response
+    {
+        if ($this->getUser()) {
+            $sortie = new Sortie();
+            $sortieForm = $this->createForm(SortieType::class, $sortie);
+            $place = new Place();
+            $placeForm = $this->createForm(PlaceType::class, $place);
+            $placeForm->handleRequest($request);
+            /*$city = new City();
+        $cityForm = $this->createForm(City::class, $city);
+        $cityForm->handleRequest($request);*/
+            $sortieForm->handleRequest($request);
+            if ($placeForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($place);
+                $em->flush();
+            }
+
+            if ($sortieForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $sortie->setOrganisator($user);
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_index');
+            }
+            return $this->render('sortie/addSortie.html.twig', [
+                'sortieForm' => $sortieForm->createView(),
+                'placeForm' => $placeForm->createView(),
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/show/{id}", name="sortie_show", methods={"GET"})
      */
     public function show(Sortie $sortie): Response
     {
+        $user = $this->getUser();
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+            'user' => $user,
+            'users' => $sortie->getUser()
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="sortie_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Sortie $sortie): Response
+    public function edit(Sortie $sortie, Request $request): Response
     {
-        $form = $this->createForm(SortieType::class, $sortie);
-        $form->handleRequest($request);
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            $form = $this->createForm(SortieType::class, $sortie);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('sortie/edit.html.twig', [
+                'sortie' => $sortie,
+                'form' => $form,
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
         }
-
-        return $this->renderForm('sortie/edit.html.twig', [
-            'sortie' => $sortie,
-            'form' => $form,
-        ]);
     }
 
     /**
-     * @Route("/{id}", name="sortie_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="sortie_delete", methods={"POST"})
      */
     public function delete(Request $request, Sortie $sortie): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($sortie);
-            $entityManager->flush();
-        }
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($sortie);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('sortie_index', [], Response::HTTP_SEE_OTHER);
+        } else {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/cancel/{id}", name="sortie_cancel")
+     */
+    public function cancel(Sortie $sortie, Request $request, StatusRepository $statusRepo): Response
+    {
+        if ($this->getUser() == $sortie->getOrganisator()) {
+            $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
+            $sortieForm->handleRequest($request);
+            if ($sortieForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $sortie->setStatus($statusRepo->find(6));
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_index');
+            }
+            return $this->renderForm('sortie/cancel.html.twig', [
+                'sortie' => $sortie,
+                'sortieForm' => $sortieForm,
+            ]);
+        } else {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+
+    /**
+     * @Route("/sign-in/{id}", name="sign_in")
+     */
+    public function signIn(Sortie $sortie): Response
+    {
+        if ($this->getUser() != $sortie->getOrganisator()) {
+            $user = $this->getUser();
+            $sortie->addUser($user);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('main');
+        } else {
+            throw $this->createAccessDeniedException();
+        }
     }
 }
