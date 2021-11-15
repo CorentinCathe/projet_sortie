@@ -39,6 +39,10 @@
                         href="{{path('profil',{id:app.user.id})}}">Mon Profil</a>
                     <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
                         href="{{path('sortieAdd', {id:app.user.id})}}">Créer Sortie</a>
+                    {% if app.user.roles['User'] == 'ROLE_ADMIN' %}
+                        <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
+                           href="{{path('userAdd', {id:app.user.id})}}">Créer un utilisateur</a>
+                    {% endif %}
                     <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
                         href="{{path('app_logout')}}">log out</a>
                 </div>
