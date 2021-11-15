@@ -3,7 +3,10 @@
 {% block title %}Sortie index{% endblock %}
 
 {% block body %}
-<h1>Sortie index</h1>
+    <h1>Sortie index</h1>
+    <div class="col-md-3">
+    {% include 'sortie/_filter.html.twig' with {form: form} only %}
+    </div>
 
 <table class="table">
     <thead>

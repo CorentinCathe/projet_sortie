@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Sortie;
@@ -14,6 +15,10 @@ use App\Repository\SortieRepository;
 use App\Repository\StatusRepository;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
+use App\Form\SearchSortieForm;
+use phpDocumentor\Reflection\Types\This;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,12 +31,16 @@ class SortieController extends AbstractController
     /**
      * @Route("/", name="sortie_index", methods={"GET"})
      */
-    public function index(SortieRepository $sortieRepository): Response
+    public function index(SortieRepository $sortieRepository, Request $request): Response
     {
+        $data = new SearchData();
+        $form = $this->createForm(SearchSortieForm::class,$data);
+        $form->handleRequest($request);
         $user = $this->getUser();
         return $this->render('sortie/index.html.twig', [
-            'sorties' => $sortieRepository->findAll(),
+            'sorties' => $sortieRepository->findSearch($data, $user),
             'user' => $user,
+            'form' => $form->createView()
         ]);
     }
 
