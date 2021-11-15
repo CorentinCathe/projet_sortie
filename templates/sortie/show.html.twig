@@ -69,9 +69,11 @@
 {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
 <a href="{{ path('sortie_edit', {'id': sortie.id}) }}">edit</a>
 {% endif %}
-{% if app.user not in users and users|length < sortie.nbSubMax and app.user %} <a
-    href="{{ path('sign_in', {'id': sortie.id}) }}">Sign
-    In</a>
+{% if app.user not in users and users|length < sortie.nbSubMax and app.user and sortie.status.type == 'Ouverte' %} <a
+    href="{{ path('sign_in', {'id': sortie.id}) }}">Sign In</a>
+    {% endif %}
+    {% if app.user in users %}
+    <a href="{{ path('sign_out', {'id': sortie.id}) }}">Sign out</a>
     {% endif %}
     {{ include('sortie/_delete_form.html.twig') }}
     {% endblock %}

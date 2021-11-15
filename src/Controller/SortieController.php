@@ -3,22 +3,17 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
-use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Sortie;
 use App\Form\PlaceType;
 use App\Form\SortieInfoType;
 use App\Form\SortieType;
-use App\Repository\CityRepository;
-use App\Repository\PlaceRepository;
+
 use App\Repository\SortieRepository;
 use App\Repository\StatusRepository;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\SearchSortieForm;
-use phpDocumentor\Reflection\Types\This;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +29,7 @@ class SortieController extends AbstractController
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
         $data = new SearchData();
-        $form = $this->createForm(SearchSortieForm::class,$data);
+        $form = $this->createForm(SearchSortieForm::class, $data);
         $form->handleRequest($request);
         $user = $this->getUser();
         return $this->render('sortie/index.html.twig', [
@@ -169,6 +164,21 @@ class SortieController extends AbstractController
         if ($this->getUser() != $sortie->getOrganisator()) {
             $user = $this->getUser();
             $sortie->addUser($user);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('main');
+        } else {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/sign-out/{id}", name="sign_out")
+     */
+    public function signOut(Sortie $sortie): Response
+    {
+        if ($this->getUser() != $sortie->getOrganisator()) {
+            $user = $this->getUser();
+            $sortie->removeUser($user);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('main');
         } else {
