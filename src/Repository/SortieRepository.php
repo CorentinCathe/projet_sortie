@@ -90,7 +90,7 @@ class SortieRepository extends ServiceEntityRepository
             ->orWhere('s.name LIKE :q')
             ->setParameter('q', "%{$search->q}%"); 
         }
-        dd($query->getDQL());
+        //dd($query->getDQL());
         return $query->getQuery()->getResult();
     }
     // /**
