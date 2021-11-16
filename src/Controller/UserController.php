@@ -2,6 +2,7 @@
 
 
 namespace App\Controller;
+
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\SiteRepository;
@@ -22,27 +23,28 @@ class UserController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('user/index.html.twig' );
+        return $this->render('user/index.html.twig');
     }
 
     /**
      * @Route("/admin/user/add/{id}", name="userAdd")
      */
-    public function userAdd(Request $request, UserPasswordHasherInterface $encoder): Response {
-            $user = new User();
-            $userForm = $this->createForm(UserType::class, $user);
-            $userForm->handleRequest($request);
-            if($userForm-> isSubmitted()){
-                $em = $this->getDoctrine()->getManager();
-                $user->setRoles(['User' => 'ROLE_ADMIN']);
-                $user->setPassword($encoder->hashPassword($user, $user->getPassword()));
-                $em->persist($user);
-                $em->flush();
-                return $this->redirectToRoute('sortie_index');
-            }
-            return $this->render('user/userAdd.html.twig', [
-                'userForm' => $userForm->createView()
-            ]);
+    public function userAdd(Request $request, UserPasswordHasherInterface $encoder): Response
+    {
+        $user = new User();
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted()) {
+            $em = $this->getDoctrine()->getManager();
+            $user->setRoles(['User' => 'ROLE_USER']);
+            $user->setPassword($encoder->hashPassword($user, $user->getPassword()));
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('sortie_index');
+        }
+        return $this->render('user/userAdd.html.twig', [
+            'userForm' => $userForm->createView()
+        ]);
     }
 
 }

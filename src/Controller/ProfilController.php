@@ -22,6 +22,17 @@ class ProfilController extends AbstractController
     }
 
     /**
+     * @Route("/profil/participant/{id}", name="profil_participant")
+     */
+    public function getParticipant(User $participant): Response
+    {
+        return $this->render('profil/displayParticipatorProfil.html.twig', [
+            'user' => $participant
+        ]);
+    }
+
+
+    /**
      * @Route("/modify_profil/{id}", name="modify")
      */
     public function modify(User $user, Request $req): Response
