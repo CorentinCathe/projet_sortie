@@ -49,6 +49,9 @@
             <th scope="col">
                 Nom
             </th>
+            <th scope="col">
+                Profil
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -59,6 +62,12 @@
             </td>
             <td>
                 <p>{{user.name}} {{user.firstName}}</p>
+            </td>
+            <td> {% if app.user.id != user.id %}
+                <a href="{{ path('profil_participant', {'id': user.id}) }}" >Voir le profil</a>
+                {% else %}
+                <a href="{{path('profil',{id:app.user.id})}}" >Mon profil</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
