@@ -11,7 +11,7 @@ class SearchData
 {
     public $q = '';
 
-    public $site = [];
+    public $site = null;
 
     public $debut;
 

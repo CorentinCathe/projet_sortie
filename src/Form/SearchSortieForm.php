@@ -12,7 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SearchSortieForm extends AbstractType{
+class SearchSortieForm extends AbstractType
+{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,13 +24,10 @@ class SearchSortieForm extends AbstractType{
                 'attr' => [
                     'placeholder' => 'Rechercher'
                 ]
-                ])
+            ])
             ->add('site', EntityType::class, [
-                'label' => 'Sites',
-                'required' => false,
                 'class' => Site::class,
-                'expanded' => true,
-                'multiple' => true
+                'choice_label' => 'name',
             ])
             ->add('debut', DateType::class, [
                 'label' => 'Date début',
@@ -48,7 +46,7 @@ class SearchSortieForm extends AbstractType{
             ->add('isInscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je suis incrit/e',
                 'required' => false,
-                
+
             ])
             ->add('isNotInscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
@@ -57,16 +55,15 @@ class SearchSortieForm extends AbstractType{
             ->add('isFinished', CheckboxType::class, [
                 'label' => 'Sorties passées',
                 'required' => false,
-            ])
-            ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class'=> SearchData::class,
-           'method' => 'GET',
-           'csrf_protection' => false 
+            'data_class' => SearchData::class,
+            'method' => 'GET',
+            'csrf_protection' => false
         ]);
     }
 
