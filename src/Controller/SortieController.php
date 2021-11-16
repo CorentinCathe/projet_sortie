@@ -165,6 +165,9 @@ class SortieController extends AbstractController
             $user = $this->getUser();
             $sortie->addUser($user);
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Inscription réussi');
+
             return $this->redirectToRoute('main');
         } else {
             throw $this->createAccessDeniedException();
@@ -179,6 +182,9 @@ class SortieController extends AbstractController
         if ($this->getUser() != $sortie->getOrganisator()) {
             $user = $this->getUser();
             $sortie->removeUser($user);
+
+            $this->addFlash('success', 'Desistement réussi');
+
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('main');
         } else {

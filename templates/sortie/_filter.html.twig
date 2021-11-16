@@ -1,3 +1,23 @@
 {{ form_start(form, {attr: {class: 'filter'}})}}
 
+<div class="filter-content">
+    <h3>Filtre sortie</h3>
+    <div class="search">
+    </div>
+    <div class="input-mouse-filter">
+        <div class="filter-selector">
+            {{ form_row(form.q) }}
+            {{ form_row(form.site) }}
+            {{ form_row(form.debut) }}
+            {{ form_row(form.fin) }}
+        </div>
+        <div class="box-filter">
+            {{ form_row(form.isOrga) }}
+            {{ form_row(form.isInscrit) }}
+            {{ form_row(form.isNotInscrit) }}
+            {{ form_row(form.isFinished) }}
+        </div>
+        <button class="filter-btn">{{ button_label|default('Submit') }}</button>
+    </div>
+</div>
 {{form_end(form)}}
