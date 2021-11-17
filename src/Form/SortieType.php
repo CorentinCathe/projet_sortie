@@ -12,6 +12,9 @@ use Doctrine\DBAL\Types\ArrayType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,11 +23,19 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('dateHourStart')
+            ->add('name', TextType::class, [
+                'label' => 'Nom'
+            ])
+            ->add('dateHourStart', DateTimeType::class, [
+                'label' => 'Date de début',
+            ])
             ->add('duration')
-            ->add('dateLimitSubscritption')
-            ->add('nbSubMax')
+            ->add('dateLimitSubscritption', DateTimeType::class, [
+                'label' => 'Date Limite Inscription ',
+            ])
+            ->add('nbSubMax', IntegerType::class, [
+                'label' => 'Nombre de participants Max'
+            ])
             ->add('information')
             //->add('user')
             ->add('site', EntityType::class, [
@@ -32,10 +43,12 @@ class SortieType extends AbstractType
                 'choice_label' => 'name',
             ]  )
             ->add('place', EntityType::class, [
+                'label' => 'Lieu',
                 'class' => Place::class,
                 'choice_label' => 'name',
             ]  )
             ->add('status', EntityType::class, [
+                'label' => 'Etat',
                 'class' => Status::class,
                 'choice_label' => 'type',
             ])
