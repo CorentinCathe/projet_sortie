@@ -77,6 +77,8 @@ class Sortie
     public function __construct()
     {
         $this->user = new ArrayCollection();
+        $this->dateHourStart = new \DateTime();
+        $this->dateLimitSubscritption = new \DateTime();
     }
 
 
