@@ -45,7 +45,7 @@ class ProfilController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 // $user->upgradePassword();
                 $em->flush();
-
+                $this->addFlash('success', 'Modifications Réussi');
                 return $this->redirectToRoute('profil');
             }
 

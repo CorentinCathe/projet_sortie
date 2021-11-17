@@ -3,55 +3,49 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-    <h1>Créer une sortie !</h1>
-    <div name="sortie-form">
-        {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        <button type="submit" class="btn btn-successe"> Valider {#<i class="fa fa-plus">#}</i></button>
-        {{ form_end(sortieForm) }}
-    </div>
-    <div id="add-place-form">
-        <button onclick="unhidePlaceForm(); hideButton();"> ajouter un lieu </button>
-    </div>
-    <div id="place-form" style="display: none" >
-        <button onclick="hidePlaceForm(); unhideButton();"> Annuler </button>
-        {{ form_start(placeForm) }}
-        {{ form_widget(placeForm) }}
-        <button type="submit" class="btn btn-successe" onclick="unhideButton() ; hidePlaceForm()"> Ajouter Lieu {#<i class="fa fa-plus">#}</i></button>
-        {{ form_end(placeForm) }}
-    </div>
-    <div>
-        <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-           href="{{path('sortie_index')}}">Annuler</a>
-    </div>
+<h1>Créer une sortie !</h1>
+<div name="sortie-form">
+    {{ form_start(sortieForm) }}
+    {{ form_widget(sortieForm) }}
+    <button type="submit" class="btn btn-successe"> Valider {#<i class="fa fa-plus">#}</i></button>
+    {{ form_end(sortieForm) }}
+</div>
+<div id="add-place-form">
+    <button onclick="unhidePlaceForm(); hideButton();"> ajouter un lieu </button>
+</div>
+<div id="place-form" style="display: none">
+    <button onclick="hidePlaceForm(); unhideButton();"> Annuler </button>
+    {{ form_start(placeForm) }}
+    {{ form_widget(placeForm) }}
+    <button type="submit" class="btn btn-successe" onclick="unhideButton() ; hidePlaceForm()"> Ajouter Lieu {#<i
+            class="fa fa-plus">#}</i></button>
+    {{ form_end(placeForm) }}
+</div>
+<div>
+    <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
+        href="{{path('sortie_index')}}">Annuler</a>
+</div>
 
 
-    <script>
-        function unhidePlaceForm(){
-            var div = document.getElementById("place-form");
-            div.style.display = 'block';
-        }
-    </script>
+<script>
+    function unhidePlaceForm() {
+        var div = document.getElementById("place-form");
+        div.style.display = 'block';
+    }
 
-    <script>
-        function hidePlaceForm(){
-            var div = document.getElementById("place-form");
-            div.style.display = 'none';
-        }
-    </script>
+    function hidePlaceForm() {
+        var div = document.getElementById("place-form");
+        div.style.display = 'none';
+    }
 
-    <script>
-        function hideButton(){
-            var div = document.getElementById("add-place-form");
-            div.style.display = 'none';
-        }
-    </script>
+    function hideButton() {
+        var div = document.getElementById("add-place-form");
+        div.style.display = 'none';
+    }
 
-    <script>
-        function unhideButton(){
-            var div = document.getElementById("add-place-form");
-            div.style.display = 'inline';
-        }
-    </script>
+    function unhideButton() {
+        var div = document.getElementById("add-place-form");
+        div.style.display = 'inline';
+    }
+</script>
 {% endblock %}
-
