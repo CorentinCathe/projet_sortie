@@ -12,23 +12,23 @@
             <td>{{ sortie.id }}</td>
         </tr>
         <tr>
-            <th>Name</th>
+            <th>Nom</th>
             <td>{{ sortie.name }}</td>
         </tr>
         <tr>
-            <th>DateHourStart</th>
+            <th>Date de début</th>
             <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
-            <th>Duration</th>
+            <th>Durée</th>
             <td>{{ sortie.duration ? sortie.duration.format('%y year(s), %m month(s), %d day(s)') : '' }}</td>
         </tr>
         <tr>
-            <th>DateLimitSubscritption</th>
+            <th>Date limite d'inscription</th>
             <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
-            <th>NbSubMax</th>
+            <th>Nombre de participants max</th>
             <td>{{ sortie.nbSubMax }}</td>
         </tr>
         <tr>
@@ -74,15 +74,15 @@
     </tbody>
 </table>
 
-<a href="{{ path('sortie_index') }}">back to list</a>
+<a href="{{ path('sortie_index') }}">Retour</a>
 {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
-<a href="{{ path('sortie_edit', {'id': sortie.id}) }}">edit</a>
+<a href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier</a>
 {% endif %}
 {% if app.user not in users and users|length < sortie.nbSubMax and app.user and sortie.status.type == 'Ouverte' %} <a
-    href="{{ path('sign_in', {'id': sortie.id}) }}">Sign In</a>
+    href="{{ path('sign_in', {'id': sortie.id}) }}">S'inscrire</a>
     {% endif %}
     {% if app.user in users %}
-    <a href="{{ path('sign_out', {'id': sortie.id}) }}">Sign out</a>
+    <a href="{{ path('sign_out', {'id': sortie.id}) }}">Se désister</a>
     {% endif %}
     {{ include('sortie/_delete_form.html.twig') }}
     {% endblock %}

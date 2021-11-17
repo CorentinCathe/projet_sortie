@@ -12,12 +12,12 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>DateHourStart</th>
-                <th>DateLimitSubscritption</th>
-                <th>NbSubMax</th>
-                <th>Status</th>
-                <th>actions</th>
+                <th>Nom</th>
+                <th>Date de Début</th>
+                <th>Date limite d'inscription</th>
+                <th>Nombre de participants max</th>
+                <th>Etat</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,12 +31,12 @@
                 <td>{{ sortie.status.type }}</td>
                 <td>
                     {#,{'sortieId': sortie.id}#}
-                    <a href="{{ path('sortie_show', {'id': sortie.id}) }}"> <button class="tbl-btn">show</button> </a>
+                    <a href="{{ path('sortie_show', {'id': sortie.id}) }}"> <button class="tbl-btn">Afficher</button> </a>
                     {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
-                    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">edit</button> </a>
+                    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button> </a>
                     {% endif %}
                     {% if app.user == sortie.organisator and sortie.status.type == 'Ouverte' %}
-                    <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}"><button class="tbl-btn">cancel</button>
+                    <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}"><button class="tbl-btn">Annuler</button>
                     </a>
                     {% endif %}
                 </td>
