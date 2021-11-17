@@ -3,15 +3,11 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
+<div class="edit-profil">
     <h1>Enregistrer un utilisateur</h1>
-    <div>
-        {{ form_start(userForm) }}
-        {{ form_widget(userForm) }}
-        <button type="submit" class="btn btn-successe"> <i class="fa fa-plus"></i></button>
-        {{ form_end(userForm) }}
-    </div>
-    <div>
-        <a class="nav-link {{ app.request.get('_route') == 'home' ? 'active' }}" aria-current="page"
-           href="{{path('sortie_index')}}">Annuler</a>
-    </div>
+    {{ form_start(userForm) }}
+    {{ form_widget(userForm) }}
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+    {{ form_end(userForm) }}
+</div>
 {% endblock %}

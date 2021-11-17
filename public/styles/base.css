@@ -31,6 +31,10 @@ body {
     width: 50%;
 }
 
+footer {
+    margin-top: 10%;
+}
+
 .footer-basic {
     width: 100%;
     height: 6vh;
@@ -84,6 +88,10 @@ body {
 .tbl-btn:hover::after {
     top: 0px;
     left: 0px;
+}
+
+.tbl-btn-back::after {
+    background-color: #ee971e;
 }
 
 .filter-btn {
@@ -177,6 +185,35 @@ form {
     border: #418fb1!important;
 }
 
+.create-sortie-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.sortie-form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 0 5%;
+    height: 50%;
+}
+
+.sortie-form .mb-3 {
+    width: 40%;
+}
+
+.place-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.table-user {
+    width: 50%!important;
+}
+
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-collapse {
         justify-content: flex-end!important
@@ -210,6 +247,16 @@ form {
         padding: 0;
         flex-direction: column;
         align-items: center;
+    }
+    .sortie-form {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        padding: 0 5%;
+        height: 100%;
+    }
+    .sortie-form .mb-3 {
+        width: 100%;
     }
 }
 
