@@ -11,24 +11,24 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Date de Début</th>
                 <th>Date limite d'inscription</th>
-                <th>Nombre de participants max</th>
+                <th>Nombre de participants</th>
                 <th>Etat</th>
+                <th>Organisateur</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for sortie in sorties %}
             <tr>
-                <td>{{ sortie.id }}</td>
                 <td>{{ sortie.name }}</td>
                 <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ sortie.nbSubMax }}</td>
+                <td> {{ sortie.getUser()|length}} / {{ sortie.nbSubMax }}</td>
                 <td>{{ sortie.status.type }}</td>
+                <td><a href="{{ path('profil_participant', {'id': sortie.organisator.id}) }}">{{ sortie.organisator.pseudo }}</a></td>
                 <td>
                     {#,{'sortieId': sortie.id}#}
                     <a href="{{ path('sortie_show', {'id': sortie.id}) }}"> <button class="tbl-btn">Afficher</button> </a>
