@@ -8,10 +8,10 @@
     {% include 'sortie/_filter.html.twig' with {form: form} only %}
 
     <h3>Résultat</h3>
+
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Date de Début</th>
                 <th>Date limite d'inscription</th>
@@ -23,7 +23,6 @@
         <tbody>
             {% for sortie in sorties %}
             <tr>
-                <td>{{ sortie.id }}</td>
                 <td>{{ sortie.name }}</td>
                 <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
@@ -31,14 +30,24 @@
                 <td>{{ sortie.status.type }}</td>
                 <td>
                     {#,{'sortieId': sortie.id}#}
-                    <a href="{{ path('sortie_show', {'id': sortie.id}) }}"> <button class="tbl-btn">Afficher</button> </a>
+                    <a href="{{ path('sortie_show', {'id': sortie.id}) }}"> <button class="tbl-btn">Afficher</button>
+                    </a>
                     {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
-                    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button> </a>
+                    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button>
+                    </a>
                     {% endif %}
                     {% if app.user == sortie.organisator and sortie.status.type == 'Ouverte' %}
                     <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}"><button class="tbl-btn">Annuler</button>
                     </a>
                     {% endif %}
+                    {% if app.user not in sortie.user and sortie.user|length < sortie.nbSubMax and app.user and
+                        sortie.status.type == 'Ouverte' %} <a href="{{ path('sign_in', {'id': sortie.id}) }}"><button
+                            class="tbl-btn">S'inscrire</button></a>
+                        {% endif %}
+                        {% if app.user in sortie.user %}
+                        <a href="{{ path('sign_out', {'id': sortie.id}) }}"><button class="tbl-btn">Se
+                                désister</button></a>
+                        {% endif %}
                 </td>
             </tr>
             {% else %}
