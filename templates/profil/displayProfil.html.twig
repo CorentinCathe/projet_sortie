@@ -15,7 +15,7 @@
                 {% endif %}
             </div>
             <div class="profil-pic">
-                <img src="{{ asset('/assets/profil-pic.svg') }}" alt="profil-pic">
+                <img src="{{ asset('assets/uploads/article_image/profil.png') }}" alt="profil-pic">
             </div>
         </div>
         <div class="profil-info">
@@ -43,7 +43,4 @@
     </div>
     <a class="btn btn-primary" id="profil-edit-btn" href="{{path('modify',{id:user.id})}}">Modifier</a>
 </div>
-
-
-
 {% endblock %}
