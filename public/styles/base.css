@@ -1,0 +1,288 @@
+html, body {
+    margin: 0px;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    height: 100%;
+    padding: 5%;
+}
+
+.input-mouse-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.search {
+    margin: 0 4%;
+    width: 50%;
+}
+
+.filter-selector {
+    width: 50%;
+}
+
+footer {
+    margin-top: 10%;
+}
+
+.footer-basic {
+    width: 100%;
+    height: 6vh;
+    background-color: #f8f9fa;
+    bottom: 0px;
+}
+
+.copyright {
+    margin: 2vh 50vw;
+    width: 100%;
+}
+
+.navbar {
+    background-color: #418fb1!important;
+}
+
+.nav-link {
+    font-size: 1.5rem;
+    color: white!important;
+}
+
+.nav-link:hover {
+    color: #ffb133!important;
+}
+
+.tbl-btn {
+    font-size: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    margin: 0 5px;
+    padding: 0px 15px 0px;
+    outline: 0;
+    border: 1px solid black;
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.tbl-btn::after {
+    content: "";
+    background-color: #ffe54c;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    top: 7px;
+    left: 7px;
+    transition: 0.2s;
+}
+
+.tbl-btn:hover::after {
+    top: 0px;
+    left: 0px;
+}
+
+.tbl-btn-back::after {
+    background-color: #ee971e;
+}
+
+.filter-btn {
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 13px 30px 13px;
+    outline: 0;
+    border: 1px solid black;
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.filter-btn::after {
+    content: "";
+    background-color: #418fb1;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    top: 7px;
+    left: 7px;
+    transition: 0.2s;
+}
+
+.filter-btn:hover::after {
+    top: 0px;
+    left: 0px;
+}
+
+.profil-content {
+    display: flex;
+    padding: 10%;
+    margin: 5%;
+    margin-bottom: 1%;
+    width: 90%;
+    flex-direction: row;
+    justify-content: space-around;
+    border: 1px solid black;
+}
+
+.profil-big-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profil-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 30%;
+}
+
+.profil-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.profil-item label {
+    font-size: 15pt;
+    font-weight: 600;
+}
+
+.profil-pic {
+    width: 200px;
+    height: 200px;
+}
+
+.profil-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-profil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5%;
+}
+
+form {
+    width: 85%;
+}
+
+#profil-edit-btn {
+    width: 50%;
+    background-color: #418fb1!important;
+    border: #418fb1!important;
+}
+
+.create-sortie-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.sortie-form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 0 5%;
+    height: 50%;
+}
+
+.sortie-form .mb-3 {
+    width: 40%;
+}
+
+.place-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.table-user {
+    width: 50%!important;
+}
+
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-collapse {
+        justify-content: flex-end!important
+    }
+}
+
+@media (max-width: 992px) {
+    .input-mouse-filter {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        width: 100%;
+    }
+    .filter-selector {
+        width: 100%;
+    }
+    .box-filter {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .tbl-btn {
+        margin: 5px;
+    }
+    .profil-pic {
+        width: 100px;
+        height: 100px;
+    }
+    .profil-content {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+    }
+    .sortie-form {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        padding: 0 5%;
+        height: 100%;
+    }
+    .sortie-form .mb-3 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .profil-item {
+        font-size: 10pt;
+    }
+    .profil-item label {
+        font-size: 12pt;
+    }
+}
+
+#toast {
+    position: absolute;
+    top: 6%;
+    left: 89%;
+    width: 10vw;
+    animation: slide-in .5s ease-out forwards;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translate(0, -10px);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

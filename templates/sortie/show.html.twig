@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sortie{% endblock %}
+
+{% block body %}
+<h1>Sortie</h1>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Nom</th>
+            <td>{{ sortie.name }}</td>
+        </tr>
+        <tr>
+            <th>Date de début</th>
+            <td>{{ sortie.dateHourStart ? sortie.dateHourStart|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Durée</th>
+            <td>{{ sortie.duration ? sortie.duration.format('%y year(s), %m month(s), %d day(s)') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Date limite d'inscription</th>
+            <td>{{ sortie.dateLimitSubscritption ? sortie.dateLimitSubscritption|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Nombre de participants max</th>
+            <td>{{ sortie.nbSubMax }}</td>
+        </tr>
+        <tr>
+            <th>Information</th>
+            <td>{{ sortie.information }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Participant</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Pseudo
+            </th>
+            <th scope="col">
+                Nom
+            </th>
+            <th scope="col">
+                Profil
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td scope="row">
+                <p>{{user.pseudo}}</p>
+            </td>
+            <td>
+                <p>{{user.name}} {{user.firstName}}</p>
+            </td>
+            <td> {% if app.user.id != user.id %}
+                <a href="{{ path('profil_participant', {'id': user.id}) }}"><button class="tbl-btn">Voir le profil</button></a>
+                {% else %}
+                <a href="{{path('profil',{id:app.user.id})}}"><button class="tbl-btn">Mon profil</button></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="show-action-btn">
+    <a href="{{ path('sortie_index') }}"><button class="tbl-btn tbl-btn-back">Retour</button></a>
+    {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
+    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button></a>
+    {% endif %}
+    {% if app.user not in users and users|length < sortie.nbSubMax and app.user and
+        sortie.status.type == 'Ouverte' %} <a href="{{ path('sign_in', {'id': sortie.id}) }}"><button
+            class="tbl-btn">S'inscrire</button></a>
+        {% endif %}
+        {% if app.user in users %}
+        <a href="{{ path('sign_out', {'id': sortie.id}) }}"><button class="tbl-btn">Se
+                désister</button></a>
+        {% endif %}
+
+</div>
+    {{ include('sortie/_delete_form.html.twig') }}
+    {% endblock %}

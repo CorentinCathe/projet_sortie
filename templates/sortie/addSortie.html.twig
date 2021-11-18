@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<div class="create-sortie-content">
+    <h1>Créer une sortie !</h1>
+    {{ form_start(sortieForm) }}
+    <div name="sortie-form" class="sortie-form">
+        {{ form_row(sortieForm.name) }}
+        {{ form_row(sortieForm.dateHourStart) }}
+        {{ form_row(sortieForm.duration) }}
+        {{ form_row(sortieForm.dateLimitSubscritption) }}
+        {{ form_row(sortieForm.nbSubMax) }}
+        {{ form_row(sortieForm.information) }}
+        {{ form_row(sortieForm.site) }}
+        <div class="place-form">
+            {{ form_row(sortieForm.place) }}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                +
+            </button>
+        </div>
+        {{ form_row(sortieForm.status) }}
+    </div>
+    <button type="submit" class="btn btn-primary"> Valider</i></button>
+    {{ form_end(sortieForm) }}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            {{ form_start(placeForm) }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ form_widget(placeForm) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"> Ajouter Lieu</button>
+                </div>
+            </div>
+            {{ form_end(placeForm) }}
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

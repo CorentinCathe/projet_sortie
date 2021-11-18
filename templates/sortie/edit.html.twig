@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Sortie{% endblock %}
+
+{% block body %}
+    <h1>Modifier la Sortie</h1>
+
+    {{ include('sortie/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('sortie_index') }}">Retour</a>
+
+    {{ include('sortie/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfilController!{% endblock %}
+
+{% block profilStyle %}
+<link rel="stylesheet" href="{{asset('styles/profil.css')}}">{% endblock %}
+
+{% block body %}
+<div class="profil">
+    <div class="profil-content">
+        <div class="profil-big-info">
+            <div class="profil-name">
+                {% if app.user.pseudo %}
+                <h1>{{user.pseudo}}</h1>
+                {% else %}
+                <h1>Mon Profile</h1>
+                {% endif %}
+            </div>
+            <div class="profil-pic">
+                <img src="{{ asset('/assets/profil-pic.svg') }}" alt="profil-pic">
+            </div>
+        </div>
+        <div class="profil-info">
+            <div class="profil-item">
+                <label for="first-name">Prénom:</label>
+                <p id="first-name">{{user.firstName}}</p>
+            </div>
+            <div class="profil-item">
+                <label for="name">Nom:</label>
+                <p id="name">{{user.name}}</p>
+            </div>
+            <div class="profil-item">
+                <label for="site">Site:</label>
+                <p id="site">{{user.site.name}}</p>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-primary" href="{{path('sortie_index')}}">Retour</a>
+</div>
+
+
+
+{% endblock %}
