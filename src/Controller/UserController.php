@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\SiteRepository;
+use App\Repository\UserRepository;
 use phpDocumentor\Reflection\Types\This;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -45,6 +46,41 @@ class UserController extends AbstractController
         return $this->render('user/userAdd.html.twig', [
             'userForm' => $userForm->createView()
         ]);
+    }
+
+    /**
+     * @Route("/admin/user/index/", name="user_index")
+     */
+    public function userIndex(Request $request, UserRepository $userRepo): Response
+    {
+        $userList = $userRepo->findAll();
+        return $this->render('user/adminUsers.html.twig', [
+            'users' => $userList
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/delete/{id}", name="user_delete")
+     */
+    public function userDelete(User $user): Response
+    {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+            return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/admin/user/desactivate/{id}", name="user_desactivate")
+     */
+    public function userDesactivate(User $user): Response
+    {
+
+        $user->setActiv(!$user->getActiv());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        return $this->redirectToRoute('user_index');
     }
 
 }

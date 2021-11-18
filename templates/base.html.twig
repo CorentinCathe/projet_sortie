@@ -49,6 +49,9 @@
                     {% if app.user.roles['User'] == 'ROLE_ADMIN' %}
                     <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
                         href="{{path('userAdd', {id:app.user.id})}}">Créer un utilisateur</a>
+
+                    <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
+                       href="{{path('user_index')}}">Liste des utilisateurs</a>
                     <a class="nav-link {{ app.request.get('_route') == 'city' ? 'active' }}"
                        href="{{path('city_index')}}">Gérer les villes</a>
                     <a class="nav-link {{ app.request.get('_route') == 'site' ? 'active' }}"
