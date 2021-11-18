@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataSite;
 use App\Entity\Site;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Site|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,18 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
-    // /**
-    //  * @return Site[] Returns an array of Site objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findSearch(SearchDataSite $search, UserInterface $user) : array
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
         ;
+        if (!empty($search->q)){
+            $query = $query
+                ->andWhere('s.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        return $query->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Site
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

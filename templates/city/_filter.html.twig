@@ -1,0 +1,14 @@
+{{ form_start(form, {attr: {class: 'filter'}})}}
+
+<div class="filter-content">
+    <h3>Filtre City</h3>
+    <div class="search">
+    </div>
+    <div class="input-mouse-filter">
+        <div class="filter-selector">
+            {{ form_row(form.q) }}
+        </div>
+        <button class="filter-btn">{{ button_label|default('Submit') }}</button>
+    </div>
+</div>
+{{form_end(form)}}

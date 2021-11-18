@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Data\SearchData;
+use App\Data\SearchDataSortie;
 use App\Entity\Place;
 use App\Entity\Sortie;
 use App\Form\PlaceType;
@@ -28,7 +28,7 @@ class SortieController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
-        $data = new SearchData();
+        $data = new SearchDataSortie();
         $form = $this->createForm(SearchSortieForm::class, $data);
         $form->handleRequest($request);
         $user = $this->getUser();
