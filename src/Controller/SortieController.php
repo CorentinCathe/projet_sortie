@@ -156,6 +156,26 @@ class SortieController extends AbstractController
         }
     }
 
+    /**
+     * @Route("/admin/cancel/{id}", name="sortie_cancel_as_admin")
+     */
+    public function cancelAsAdmin(Sortie $sortie, Request $request, StatusRepository $statusRepo): Response
+    {
+            $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
+            $sortieForm->handleRequest($request);
+            if ($sortieForm->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $sortie->setStatus($statusRepo->find(6));
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_index');
+            }
+            return $this->renderForm('sortie/cancel.html.twig', [
+                'sortie' => $sortie,
+                'sortieForm' => $sortieForm,
+            ]);
+    }
+
 
     /**
      * @Route("/sign-in/{id}", name="sign_in")

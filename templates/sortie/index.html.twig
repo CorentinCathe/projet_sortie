@@ -38,14 +38,20 @@
                     <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button>
                     </a>
                     {% endif %}
-                    {% if app.user == sortie.organisator and sortie.status.type == 'Ouverte' %}
-                    <a href="{{ path('sortie_cancel', {'id': sortie.id}) }}"><button class="tbl-btn">Annuler</button>
-                    </a>
-                    {% endif %}
                     {% if app.user not in sortie.user and sortie.user|length < sortie.nbSubMax and app.user and
-                        sortie.status.type == 'Ouverte' %} <a href="{{ path('sign_in', {'id': sortie.id}) }}"><button
-                            class="tbl-btn">S'inscrire</button></a>
+                        sortie.status.type == 'Ouverte' and app.user.id != sortie.organisator.id %} <a href="{{ path('sign_in', {'id': sortie.id}) }}"><button
+                                class="tbl-btn">S'inscrire</button></a>
+                    {% endif %}
+                    {% if (app.user == sortie.organisator and sortie.status.type == 'Ouverte') or ( app.user.roles['User'] == 'ROLE_ADMIN' and sortie.status.type == 'Ouverte') %}
+                        {% if app.user.roles['User'] == 'ROLE_ADMIN' %}
+                            <a href="{{ path( 'sortie_cancel_as_admin', {'id': sortie.id}) }}"><button class="tbl-btn">Annuler</button>
+                        </a>
+                        {% else %}
+                        <a href="{{ path( 'sortie_cancel', {'id': sortie.id}) }}"><button class="tbl-btn">Annuler</button>
+                        </a>
                         {% endif %}
+                    {% endif %}
+
                         {% if app.user in sortie.user %}
                         <a href="{{ path('sign_out', {'id': sortie.id}) }}"><button class="tbl-btn">Se
                                 désister</button></a>
