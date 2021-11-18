@@ -15,7 +15,8 @@
                 {% endif %}
             </div>
             <div class="profil-pic">
-                <img src="{{ asset('assets/uploads/article_image/profil.png') }}" alt="profil-pic">
+                <img src="{{ asset('assets/uploads/article_image/profil.'~ app.request.get('fileExtension')) }}"
+                    alt="profil-pic">
             </div>
         </div>
         <div class="profil-info">
