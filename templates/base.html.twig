@@ -47,6 +47,9 @@
                     {% if app.user.roles['User'] == 'ROLE_ADMIN' %}
                     <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
                         href="{{path('userAdd', {id:app.user.id})}}">Créer un utilisateur</a>
+                    <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
+                       href="{{path('user_index')}}">Liste des utilisateurs</a>
+
                     {% endif %}
                     <a class="nav-link {{ app.request.get('_route') == 'profil' ? 'active' }}"
                         href="{{path('app_logout')}}">Log out</a>
