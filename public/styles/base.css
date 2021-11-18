@@ -48,16 +48,16 @@ footer {
 }
 
 .navbar {
-    background-color: #418fb1!important;
+    background-color: #418fb1 !important;
 }
 
 .nav-link {
     font-size: 1.5rem;
-    color: white!important;
+    color: white !important;
 }
 
 .nav-link:hover {
-    color: #ffb133!important;
+    color: #ffb133 !important;
 }
 
 .tbl-btn {
@@ -157,7 +157,7 @@ footer {
     font-weight: 600;
 }
 
-.profil-pic {
+.profil-pic img {
     width: 200px;
     height: 200px;
 }
@@ -181,8 +181,8 @@ form {
 
 #profil-edit-btn {
     width: 50%;
-    background-color: #418fb1!important;
-    border: #418fb1!important;
+    background-color: #418fb1 !important;
+    border: #418fb1 !important;
 }
 
 .create-sortie-content {
@@ -211,12 +211,12 @@ form {
 }
 
 .table-user {
-    width: 50%!important;
+    width: 50% !important;
 }
 
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-collapse {
-        justify-content: flex-end!important
+        justify-content: flex-end !important
     }
 }
 
@@ -228,26 +228,32 @@ form {
         flex-direction: column;
         width: 100%;
     }
+
     .filter-selector {
         width: 100%;
     }
+
     .box-filter {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
     }
+
     .tbl-btn {
         margin: 5px;
     }
-    .profil-pic {
+
+    .profil-pic img {
         width: 100px;
         height: 100px;
     }
+
     .profil-content {
         padding: 0;
         flex-direction: column;
         align-items: center;
     }
+
     .sortie-form {
         display: flex;
         flex-wrap: wrap;
@@ -255,6 +261,7 @@ form {
         padding: 0 5%;
         height: 100%;
     }
+
     .sortie-form .mb-3 {
         width: 100%;
     }
@@ -264,6 +271,7 @@ form {
     .profil-item {
         font-size: 10pt;
     }
+
     .profil-item label {
         font-size: 12pt;
     }
@@ -282,6 +290,7 @@ form {
         transform: translate(0, -10px);
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }

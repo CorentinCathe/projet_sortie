@@ -6,6 +6,7 @@ use App\Entity\Site;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,6 +36,10 @@ class ProfilType extends AbstractType
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'name'
+            ])
+            ->add('profilPictureFile', FileType::class, [
+                'required' => false,
+                'mapped' => false
             ]);
     }
 
