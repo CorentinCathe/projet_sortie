@@ -7,7 +7,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\VarDumper\Cloner\Data;
 
-class SearchData
+class SearchDataSortie
 {
     public $q = '';
 

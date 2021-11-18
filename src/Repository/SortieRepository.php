@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
+use App\Data\SearchDataSortie;
 use App\Entity\Sortie;
 use App\Entity\User;
 use DateTime;
@@ -25,7 +25,7 @@ class SortieRepository extends ServiceEntityRepository
     /**
     * @return Sortie[] Returns an array of Sortie objects
     */
-    public function findSearch(SearchData $search, User $user) : array {
+    public function findSearch(SearchDataSortie $search, User $user) : array {
         $query = $this
             ->createQueryBuilder('s')
             ->select('site', 's')
