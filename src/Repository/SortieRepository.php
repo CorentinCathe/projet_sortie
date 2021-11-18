@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
+use App\Data\SearchDataSortie;
 use App\Entity\Sortie;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,72 +25,161 @@ class SortieRepository extends ServiceEntityRepository
     /**
     * @return Sortie[] Returns an array of Sortie objects
     */
-    public function findSearch(SearchData $search, User $user) : array {
+    public function findSearch(SearchDataSortie $search, User $user) : array {
         $query = $this
             ->createQueryBuilder('s')
             ->select('site', 's')
-            ->join('s.site','site');
+            ->join('s.site','site')
+        ;
+
+        switch ([!empty($search->isOrga),!empty($search->isInscrit),!empty($search->isNotInscrit),!empty($search->isFinished)]) {
+            case [true, true,true,true]:
+                break;
+            case [false, false,false,false]:
+                break;
+            case [true, false,false,false]:
+                $query = $query
+                    ->andWhere('s.organisator = :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->andWhere('s.dateHourStart > :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+            ;
+                break;
+            case [false, true,false,false]:
+                $query = $query
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->andWhere('s.id in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->andWhere('s.dateHourStart > :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                    ;
+                break;
+            case [false, false,true,false]:
+                $query = $query
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->andWhere('s.id not in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->andWhere('s.dateHourStart > :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                ;
+                break;
+            case [false, false,false,true]:
+                $query = $query
+                    ->andWhere('s.dateHourStart <= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                    ;
+                break;
+            case [true, true,false,false]:
+                $query = $query
+                    ->orWhere('s.organisator = :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->orWhere('s.id in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->andWhere('s.dateHourStart > :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                ;
+                break;
+            case [true, false,true,false]:
+                $query = $query
+                    ->orWhere('s.organisator = :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->orWhere('s.id not in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->andWhere('s.dateHourStart > :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                ;
+                break;
+            case [true, false,false,true]:
+                $query = $query
+                    ->orWhere('s.organisator = :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->orWhere('s.dateHourStart <= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'));
+                ;
+                break;
+            case [false, true,true,false]:
+                $query = $query
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->andWhere('s.dateHourStart >= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'));
+                break;
+            case [false, true,false,true]:
+                $query = $query
+                    ->andWhere('s.id in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->orWhere('s.dateHourStart <= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                    ;
+                //dd($query->getDQL());
+                break;
+            case [false, false,true,true]:
+                $query = $query
+                    ->orWhere('s.id not in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->orWhere('s.dateHourStart <= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                ;
+                break;
+            case [true, true,true,false]:
+                $query = $query
+                    ->orWhere('s.dateHourStart >= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                    ;
+                break;
+            case [false, true,true,true]:
+                $query = $query
+                    ->andWhere('s.organisator != :orga')
+                    ->setParameter('orga', $user->getId())
+                    ;
+                break;
+            case [true, false,true,true]:
+                $query = $query
+                    ->andWhere('s.id not in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ;
+                break;
+            case [true, true,false,true]:
+                $query = $query
+                    ->orWhere('s.organisator = :orga')
+                    ->setParameter('orga', $user->getId())
+                    ->orWhere('s.id in (Select s5.id from App\Entity\Sortie s5 inner join s5.user user5 where user5.id = :u)')
+                    ->setParameter('u', $user->getId())
+                    ->orWhere('s.dateHourStart <= :date')
+                    ->setParameter('date', date('Y-m-d H:i:s'))
+                ;
+                break;
+        }
 
         if (!empty($search->q)){
             $query = $query
-            ->andWhere('s.name LIKE :q')
-            ->setParameter('q', "%{$search->q}%"); 
+                ->andWhere('s.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
         }
 
         if (!empty($search->site)){
             $query = $query
-            ->andWhere('site.id IN (:site)')
-            ->setParameter('site', $search->site); 
+                ->andWhere('site.id IN (:site)')
+                ->setParameter('site', $search->site);
         }
         if (!empty($search->debut)){
             $query = $query
-            ->andWhere('s.dateHourStart >= :debut')
-            ->setParameter('debut', $search->debut); 
+                ->andWhere('s.dateHourStart >= :debut')
+                ->setParameter('debut', $search->debut);
         }
         if (!empty($search->fin)){
             $query = $query
-            ->andWhere('s.dateHourStart <= :fin')
-            ->setParameter('fin', $search->fin); 
+                ->andWhere('s.dateHourStart <= :fin')
+                ->setParameter('fin', $search->fin);
         }
-        if (!empty($search->isOrga)){
-            $query = $query
-            ->andWhere('s.organisator = :orga')
-            ->setParameter('orga', $user->getId()); 
-        }
-        if (!empty($search->isInscrit) && !empty($search->isNotInscrit)){
 
-        }else{
-        if (!empty($search->isInscrit)){
-            $sub = $this->createQueryBuilder('s2')
-            ->select('s2')
-            ->join('s2.user', 'user2')
-            ->andWhere('user2.id in (:inscrit)')
-            ->setParameter('inscrit', $user->getId()); 
-            $query = $query
-            ->andWhere($query->expr()->exists($sub->getDQL()))
-            ->setParameter('inscrit', $user->getId()); 
-        }
-        if (!empty($search->isNotInscrit)){
-            $sub = $this->createQueryBuilder('s4')
-            ->select('s4')
-            ->join('s4.user', 'user4')
-            ->orWhere('user4.id in (:inscrit)')
-            ->setParameter('inscrit', $user->getId()); 
-            //dd($sub->getDQL());
-            $query = $query
-            ->orWhere('s.id not in (Select s3.id from App\Entity\Sortie s3 inner join s3.user user3)')
-            // ->join('s.user', 'user')
-            // ->andWhere('user.id not in (:inscrit)')
-            // ->setParameter('inscrit', $user->getId())
-            ->orWhere($query->expr()->not($query->expr()->exists($sub->getDQL())))
-            ->setParameter('inscrit', $user->getId()); 
-        }
-    } 
-        if (!empty($search->isFinished)){
-            $query = $query
-            ->orWhere('s.name LIKE :q')
-            ->setParameter('q', "%{$search->q}%"); 
-        }
+
         //dd($query->getDQL());
         return $query->getQuery()->getResult();
     }

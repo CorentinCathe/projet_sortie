@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ProfilType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,8 +43,22 @@ class ProfilController extends AbstractController
 
             $formProfil->handleRequest($req);
             if ($formProfil->isSubmitted()) {
+
+                $uploadedFile = $formProfil['profilPictureFile']->getData();
+                if ($uploadedFile) {
+                    $filesystem = new Filesystem;
+                    $filesystem->remove('public\uploads\article_image\profil.*');
+                    $destination = $this->getParameter('kernel.project_dir') . '/public/assets/uploads/article_image';
+                    $newFilename = 'profil.' . $uploadedFile->guessExtension();
+                    $uploadedFile->move(
+                        $destination,
+                        $newFilename
+                    );
+                    $user->setProfilPicture($newFilename);
+                }
+
+
                 $em = $this->getDoctrine()->getManager();
-                // $user->upgradePassword();
                 $em->flush();
                 $this->addFlash('success', 'Modifications Réussi');
                 return $this->redirectToRoute('profil');

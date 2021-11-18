@@ -7,21 +7,21 @@ use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\VarDumper\Cloner\Data;
 
-class SearchData
+class SearchDataSortie
 {
     public $q = '';
 
-    public $site = null;
+    public $site;
 
     public $debut;
 
     public $fin;
 
-    public $isOrga = false;
+    public $isOrga = true;
 
-    public $isInscrit = false;
+    public $isInscrit = true;
 
-    public $isNotInscrit = false;
+    public $isNotInscrit = true;
 
     public $isFinished = false;
 }

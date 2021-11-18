@@ -77,6 +77,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $sortieOrga;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profilPicture;
+
 
 
     public function __construct()
@@ -299,6 +304,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $sortieOrga->setOrganisator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfilPicture(): ?string
+    {
+        return $this->profilPicture;
+    }
+
+    public function setProfilPicture(?string $profilPicture): self
+    {
+        $this->profilPicture = $profilPicture;
 
         return $this;
     }

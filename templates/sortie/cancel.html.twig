@@ -3,11 +3,11 @@
 {% block title %}Sortie{% endblock %}
 
 {% block body %}
-    <h1>Cancel Sortie</h1>
+<h1>Cancel Sortie</h1>
 
-    {{ form_start(sortieForm) }}
-    <table class="table">
-        <tbody>
+{{ form_start(sortieForm) }}
+<table class="table">
+    <tbody>
         <tr>
             <th>Nom :</th>
             <td>{{ sortie.name }}</td>
@@ -28,9 +28,9 @@
             <th>Raison :</th>
             <td>{{ form_widget(sortieForm.information) }}</td>
         </tr>
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-successe"> Enregistrer {#<i class="fa fa-plus">#}</i></button>
-    <button class="btn btn-successe"><a href="{{ path('sortie_index') }}">Annuler</a></button>
-    {{form_end(sortieForm, {'render_rest': false}) }}
+    </tbody>
+</table>
+<button type="submit" class="btn btn-successe"> Enregistrer {#<i class="fa fa-plus">#}</i></button>
+<button class="btn btn-successe"><a href="{{ path('sortie_index') }}">Annuler</a></button>
+{{form_end(sortieForm, {'render_rest': false}) }}
 {% endblock %}

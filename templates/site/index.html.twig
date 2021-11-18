@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}site index{% endblock %}
+
+{% block body %}
+
+    <div class="page-content">
+        {% include 'site/_filter.html.twig' with {form: form} only %}
+
+        <h3>Résultat</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for site in sites %}
+                <tr>
+                    <td>{{ site.name }}</td>
+                    <td>
+                        {#,{'siteId': site.id}#}
+                        <a href="{{ path('site_edit', {'id': site.id}) }}"><button class="tbl-btn">Modifier</button>
+                        </a>
+                        <a href="{{ path('site_delete', {'id': site.id}) }}"> <button class="tbl-btn">Supprimer</button>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">no records found</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                {{ form_start(form_add) }}
+                <td>{{ form_row(form_add.name) }}</td>
+                <td><button type="submit" class="btn btn-primary"> Valider</button></td>
+                {{ form_end(form_add) }}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

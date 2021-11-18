@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Data\SearchDataCity;
 use App\Entity\City;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method City|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,17 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
-    // /**
-    //  * @return City[] Returns an array of City objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findSearch(SearchDataCity $search, UserInterface $user) : array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
         ;
+        if (!empty($search->q)){
+            $query = $query
+                ->andWhere('s.name LIKE :q')
+                ->setParameter('q', "%{$search->q}%");
+        }
+        return $query->getQuery()->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?City
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

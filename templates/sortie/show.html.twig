@@ -8,10 +8,6 @@
 <table class="table">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ sortie.id }}</td>
-        </tr>
-        <tr>
             <th>Nom</th>
             <td>{{ sortie.name }}</td>
         </tr>
@@ -64,25 +60,29 @@
                 <p>{{user.name}} {{user.firstName}}</p>
             </td>
             <td> {% if app.user.id != user.id %}
-                <a href="{{ path('profil_participant', {'id': user.id}) }}" >Voir le profil</a>
+                <a href="{{ path('profil_participant', {'id': user.id}) }}"><button class="tbl-btn">Voir le profil</button></a>
                 {% else %}
-                <a href="{{path('profil',{id:app.user.id})}}" >Mon profil</a>
+                <a href="{{path('profil',{id:app.user.id})}}"><button class="tbl-btn">Mon profil</button></a>
                 {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<div class="show-action-btn">
+    <a href="{{ path('sortie_index') }}"><button class="tbl-btn tbl-btn-back">Retour</button></a>
+    {% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
+    <a href="{{ path('sortie_edit', {'id': sortie.id}) }}"><button class="tbl-btn">Modifier</button></a>
+    {% endif %}
+    {% if app.user not in users and users|length < sortie.nbSubMax and app.user and
+        sortie.status.type == 'Ouverte' %} <a href="{{ path('sign_in', {'id': sortie.id}) }}"><button
+            class="tbl-btn">S'inscrire</button></a>
+        {% endif %}
+        {% if app.user in users %}
+        <a href="{{ path('sign_out', {'id': sortie.id}) }}"><button class="tbl-btn">Se
+                désister</button></a>
+        {% endif %}
 
-<a href="{{ path('sortie_index') }}">Retour</a>
-{% if app.user == sortie.organisator and sortie.status.type == 'Créée' %}
-<a href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier</a>
-{% endif %}
-{% if app.user not in users and users|length < sortie.nbSubMax and app.user and sortie.status.type == 'Ouverte' %} <a
-    href="{{ path('sign_in', {'id': sortie.id}) }}">S'inscrire</a>
-    {% endif %}
-    {% if app.user in users %}
-    <a href="{{ path('sign_out', {'id': sortie.id}) }}">Se désister</a>
-    {% endif %}
+</div>
     {{ include('sortie/_delete_form.html.twig') }}
     {% endblock %}
