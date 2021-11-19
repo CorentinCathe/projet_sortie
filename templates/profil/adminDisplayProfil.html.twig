@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfilController!{% endblock %}
+
+
+{% block body %}
+    <div class="profil-display">
+        <div class="profil-content">
+            <div class="profil-big-info">
+                <div class="profil-name">
+                    {% if app.user.pseudo %}
+                        <h1>{{user.pseudo}}</h1>
+                    {% else %}
+                        <h1>Mon Profile</h1>
+                    {% endif %}
+                </div>
+                <div class="profil-pic">
+                    <img src="{{ asset('assets/uploads/article_image/'~ app.user.profilPicture) }}" alt="profil-pic">
+                </div>
+            </div>
+            <div class="profil-info">
+                <div class="profil-item">
+                    <label for="first-name">Prénom:</label>
+                    <p id="first-name">{{user.firstName}}</p>
+                </div>
+                <div class="profil-item">
+                    <label for="name">Nom:</label>
+                    <p id="name">{{user.name}}</p>
+                </div>
+                <div class="profil-item">
+                    <label for="phone-number">Téléphone:</label>
+                    <p id="phone-number">{{user.phoneNumber}}</p>
+                </div>
+                <div class="profil-item">
+                    <label for="mail">Email:</label>
+                    <p id="mail">{{user.email}}</p>
+                </div>
+                <div class="profil-item">
+                    <label for="site">Site:</label>
+                    <p id="site">{{user.site.name}}</p>
+                </div>
+            </div>
+        </div>
+       <a class="btn btn-primary" id="profil-edit-btn" href="{{path('user_index')}}">Retour</a>
+    </div>
+{% endblock %}

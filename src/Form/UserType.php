@@ -57,7 +57,7 @@ class UserType extends AbstractType
             ->add('phoneNumber', IntegerType::class, [
                 'label' => 'Numéro de Téléphone'
             ])
-            ->add('activ') //TODO: Change label name
+            //->add('activ')
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'name',

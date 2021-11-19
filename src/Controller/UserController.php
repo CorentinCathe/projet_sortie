@@ -27,9 +27,10 @@ class UserController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $user->setRoles(['User' => 'ROLE_USER']);
             $user->setPassword($encoder->hashPassword($user, $user->getPassword()));
+            $user->setActiv(false);
             $em->persist($user);
             $em->flush();
-            return $this->redirectToRoute('sortie_index');
+            return $this->redirectToRoute('user_index');
         }
         return $this->render('user/userAdd.html.twig', [
             'userForm' => $userForm->createView()
@@ -44,6 +45,16 @@ class UserController extends AbstractController
         $userList = $userRepo->findAll();
         return $this->render('user/adminUsers.html.twig', [
             'users' => $userList
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/profil/{id}", name="admin_profil")
+     */
+    public function profilAsAdmin(User $user): Response
+    {
+        return $this->render('profil/adminDisplayProfil.html.twig', [
+            'user' => $user
         ]);
     }
 

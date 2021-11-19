@@ -24,7 +24,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.firstName }}</td>
                     <td>{{ user.pseudo }}</td>
-                    <td><a href="{{path('profil_participant',{id:user.id})}}">Voir</a></td>
+                    <td><a href="{{path('admin_profil',{id:user.id})}}">Voir</a></td>
                     <td><a href="{{ path('user_desactivate', {'id': user.id}) }}"><button class="tbl-btn">{% if user.activ == true %}Désactiver{% else %}Activer{% endif %}</button>
                         </a>
                         <a href="{{ path('user_delete', {'id': user.id}) }}"><button class="tbl-btn">Supprimer</button>
