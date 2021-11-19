@@ -3,11 +3,24 @@
 {% block title %}Edit Sortie{% endblock %}
 
 {% block body %}
+
+
+<div class="create-sortie-content">
     <h1>Modifier la Sortie</h1>
-
-    {{ include('sortie/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('sortie_index') }}">Retour</a>
-
-    {{ include('sortie/_delete_form.html.twig') }}
+    {{ form_start(form) }}
+    <div name="sortie-form" class="sortie-form">
+        {{ form_row(form.name) }}
+        {{ form_row(form.dateHourStart) }}
+        {{ form_row(form.duration) }}
+        {{ form_row(form.dateLimitSubscritption) }}
+        {{ form_row(form.nbSubMax) }}
+        {{ form_row(form.information) }}
+        {{ form_row(form.site) }}
+        {{ form_row(form.place) }}
+        {{ form_row(form.status) }}
+    </div>
+    <button type="submit" class="btn btn-primary"> Update</button>
+    {{ form_end(form) }}
+</div>
+{{ include('sortie/_delete_form.html.twig') }}
 {% endblock %}
