@@ -48,9 +48,9 @@ class ProfilController extends AbstractController
                 if ($uploadedFile) {
                     $fileExtension = $uploadedFile->guessExtension();
                     $filesystem = new Filesystem;
-                    $filesystem->remove('public\uploads\article_image\profil.' . $fileExtension);
+                    $filesystem->remove('public\uploads\article_image\profil-' . $this->getUser()->getId() . '.' . $fileExtension);
                     $destination = $this->getParameter('kernel.project_dir') . '/public/assets/uploads/article_image';
-                    $newFilename = 'profil.' . $fileExtension;
+                    $newFilename = 'profil-' . $this->getUser()->getId() . '.' . $fileExtension;
                     $uploadedFile->move(
                         $destination,
                         $newFilename
@@ -62,7 +62,7 @@ class ProfilController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
                 $this->addFlash('success', 'Modifications Réussi');
-                return $this->redirectToRoute('profil', ['fileExtension' => $fileExtension]);
+                return $this->redirectToRoute('profil');
             }
 
             return $this->render('profil/modifyProfil.html.twig', [
