@@ -41,7 +41,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/sortieAdd/{id}", name="sortieAdd")
+     * @Route("/sortieAdd/{id}", name="sortie_add")
      */
     public function sortieAdd(Request $request, User $user): Response
     {
@@ -51,9 +51,6 @@ class SortieController extends AbstractController
             $place = new Place();
             $placeForm = $this->createForm(PlaceType::class, $place);
             $placeForm->handleRequest($request);
-            /*$city = new City();
-        $cityForm = $this->createForm(City::class, $city);
-        $cityForm->handleRequest($request);*/
             $sortieForm->handleRequest($request);
             if ($placeForm->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
@@ -161,19 +158,19 @@ class SortieController extends AbstractController
      */
     public function cancelAsAdmin(Sortie $sortie, Request $request, StatusRepository $statusRepo): Response
     {
-            $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
-            $sortieForm->handleRequest($request);
-            if ($sortieForm->isSubmitted()) {
-                $em = $this->getDoctrine()->getManager();
-                $sortie->setStatus($statusRepo->find(6));
-                $em->persist($sortie);
-                $em->flush();
-                return $this->redirectToRoute('sortie_index');
-            }
-            return $this->renderForm('sortie/cancel.html.twig', [
-                'sortie' => $sortie,
-                'sortieForm' => $sortieForm,
-            ]);
+        $sortieForm = $this->createForm(SortieInfoType::class, $sortie);
+        $sortieForm->handleRequest($request);
+        if ($sortieForm->isSubmitted()) {
+            $em = $this->getDoctrine()->getManager();
+            $sortie->setStatus($statusRepo->find(6));
+            $em->persist($sortie);
+            $em->flush();
+            return $this->redirectToRoute('sortie_index');
+        }
+        return $this->renderForm('sortie/cancel.html.twig', [
+            'sortie' => $sortie,
+            'sortieForm' => $sortieForm,
+        ]);
     }
 
 

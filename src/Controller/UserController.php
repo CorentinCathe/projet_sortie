@@ -5,11 +5,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\SiteRepository;
 use App\Repository\UserRepository;
-use phpDocumentor\Reflection\Types\This;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +16,7 @@ class UserController extends AbstractController
 {
 
     /**
-     * @Route("/index", name="index")
-     */
-    public function index(): Response
-    {
-        return $this->render('user/index.html.twig');
-    }
-
-    /**
-     * @Route("/admin/user/add/{id}", name="userAdd")
+     * @Route("/admin/user/add/{id}", name="user_add")
      */
     public function userAdd(Request $request, UserPasswordHasherInterface $encoder): Response
     {
@@ -51,7 +39,7 @@ class UserController extends AbstractController
     /**
      * @Route("/admin/user/index/", name="user_index")
      */
-    public function userIndex(Request $request, UserRepository $userRepo): Response
+    public function userIndex(UserRepository $userRepo): Response
     {
         $userList = $userRepo->findAll();
         return $this->render('user/adminUsers.html.twig', [
@@ -64,10 +52,10 @@ class UserController extends AbstractController
      */
     public function userDelete(User $user): Response
     {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-            return $this->redirectToRoute('user_index');
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+        return $this->redirectToRoute('user_index');
     }
 
     /**
@@ -82,5 +70,4 @@ class UserController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('user_index');
     }
-
 }

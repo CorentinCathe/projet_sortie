@@ -4,46 +4,46 @@
 
 {% block body %}
 
-    <div class="page-content">
-        {% include 'city/_filter.html.twig' with {form: form} only %}
+<div class="page-content">
+    {% include 'city/_filter.html.twig' with {form: form} only %}
 
-        <h3>Résultat</h3>
+    <h3>Résultat</h3>
 
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
             <tr>
                 <th>Nom</th>
                 <th>Code postal</th>
                 <th>Actions</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             {% for city in citys %}
-                <tr>
-                    <td>{{ city.name }}</td>
-                    <td>{{ city.postalCode }}</td>
-                    <td>
-                        {#,{'cityId': city.id}#}
-                        <a href="{{ path('city_edit', {'id': city.id}) }}"><button class="tbl-btn">Modifier</button>
-                        </a>
-                        <a href="{{ path('city_delete', {'id': city.id}) }}"> <button class="tbl-btn">Supprimer</button>
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ city.name }}</td>
+                <td>{{ city.postalCode }}</td>
+                <td>
+                    {#,{'cityId': city.id}#}
+                    <a href="{{ path('city_edit', {'id': city.id}) }}"><button class="tbl-btn">Modifier</button>
+                    </a>
+                    <a href="{{ path('city_delete', {'id': city.id}) }}"> <button class="tbl-btn">Supprimer</button>
+                    </a>
+                </td>
+            </tr>
             {% else %}
-                <tr>
-                    <td colspan="8">no records found</td>
-                </tr>
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
             {% endfor %}
             <tr>
                 {{ form_start(form_add) }}
                 <td>{{ form_row(form_add.name) }}</td>
                 <td>{{ form_row(form_add.postalCode) }}</td>
-                <td><button type="submit" class="btn btn-primary"> Valider</button></td>
+                <td><button type="submit" class="btn btn-primary"> Ajouter</button></td>
                 {{ form_end(form_add) }}
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
