@@ -17,14 +17,18 @@ class MainController extends AbstractController
      */
     public function index(SortieRepository $sortieRepository, Request $request): Response
     {
-        $data = new SearchDataSortie();
-        $form = $this->createForm(SearchSortieForm::class, $data);
-        $form->handleRequest($request);
-        $user = $this->getUser();
-        return $this->render('sortie/index.html.twig', [
-            'sorties' =>  $sortieRepository->findSearch($data, $user),
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+        if ($this->getUser()->getActiv()) {
+            $data = new SearchDataSortie();
+            $form = $this->createForm(SearchSortieForm::class, $data);
+            $form->handleRequest($request);
+            $user = $this->getUser();
+            return $this->render('sortie/index.html.twig', [
+                'sorties' =>  $sortieRepository->findSearch($data, $user),
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
+        } else {
+            return $this->redirectToRoute('app_logout');
+        }
     }
 }
